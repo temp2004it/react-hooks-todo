@@ -1,14 +1,21 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
 
-export default function TodoItem({ data, onCompleted }) {
+export default function TodoItem({ data, onCompleted, onDelete }) {
   return (
-    <li>
+    <li className="todo-item">
       <span>{data.text}</span>
-      <input
-        type="checkbox"
-        checked={data.completed}
-        onChange={() => onCompleted(data)}
-      />
+      <div className="actions">
+        <input
+          type="checkbox"
+          checked={data.completed}
+          onChange={() => onCompleted(data)}
+        />
+
+        <FontAwesomeIcon icon={faTrashAlt} onClick={() => onDelete(data)} />
+        <FontAwesomeIcon icon={faEdit} />
+      </div>
     </li>
   );
 }

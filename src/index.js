@@ -5,6 +5,7 @@ import TodoList from "./components/TodoList";
 import todosReducer from "./hooks/TodoReducer";
 import TodoAction from "./hooks/TodoAction";
 
+import "font-awesome/css/font-awesome.min.css";
 import "./styles.css";
 
 function App() {
@@ -24,15 +25,21 @@ function App() {
   function onCompleted(todo) {
     dispatch({
       type: TodoAction.COMPLETED,
-      todos: todos,
-      completedUuid: todo.uuid
+      uuid: todo.uuid
+    });
+  }
+
+  function onDelete(todo) {
+    dispatch({
+      type: TodoAction.DEL,
+      uuid: todo.uuid
     });
   }
 
   return (
     <div>
       <TodoInput onAdd={submitTodoItem} />
-      <TodoList todos={todos} onCompleted={onCompleted} />
+      <TodoList todos={todos} onCompleted={onCompleted} onDelete={onDelete} />
     </div>
   );
 }
