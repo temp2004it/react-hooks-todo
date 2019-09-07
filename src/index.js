@@ -1,45 +1,84 @@
-import React, { useReducer, useEffect } from "react";
+import "font-awesome/css/font-awesome.min.css";
+import React, { useEffect, useReducer, useState } from "react";
 import ReactDOM from "react-dom";
 import TodoInput from "./components/TodoInput";
 import TodoList from "./components/TodoList";
-import todosReducer from "./hooks/TodoReducer";
 import TodoAction from "./hooks/TodoAction";
-
-import "font-awesome/css/font-awesome.min.css";
+import todosReducer from "./hooks/TodoReducer";
 import "./styles.css";
 
 function App() {
   const [todos, dispatch] = useReducer(todosReducer, []);
+  const [text, setText] = useState("");
+  const [editId, setEditId] = useState(null);
 
   useEffect(() => {
     console.log(todos);
   });
 
-  function submitTodoItem(value) {
-    dispatch({
-      type: TodoAction.ADD,
-      text: value
-    });
+  function handleSubmit(value) {
+    if (editId) {
+      dispatch({
+        type: TodoAction.EDIT,
+        text: value,
+        uuid: editId
+      });
+    } else {
+      dispatch({
+        type: TodoAction.CREATE,
+        text: value
+      });
+    }
   }
 
-  function onCompleted(todo) {
+  function handleComplete(todo) {
     dispatch({
       type: TodoAction.COMPLETED,
       uuid: todo.uuid
     });
   }
 
-  function onDelete(todo) {
+  function handleDelete(todo) {
     dispatch({
       type: TodoAction.DEL,
       uuid: todo.uuid
     });
   }
 
+  function handleEdit(todo) {
+    setText(todo.text);
+    setEditId(todo.uuid);
+  }
+
+  function submitText() {
+    handleSubmit(text);
+    setText("");
+    setEditId(null);
+  }
+
+  function changeText(e) {
+    setText(e.target.value);
+  }
+
+  function cancelText() {
+    setText("");
+    setEditId(null);
+  }
+
   return (
     <div>
-      <TodoInput onAdd={submitTodoItem} />
-      <TodoList todos={todos} onCompleted={onCompleted} onDelete={onDelete} />
+      <TodoInput
+        value={text}
+        onSubmit={submitText}
+        onChange={changeText}
+        onCancel={cancelText}
+      />
+      <TodoList
+        todos={todos}
+        onCompleted={handleComplete}
+        onDelete={handleDelete}
+        onEdit={handleEdit}
+      />
     </div>
   );
 }

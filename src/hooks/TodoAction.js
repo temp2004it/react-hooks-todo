@@ -1,5 +1,5 @@
 const TodoAction = {
-  ADD: 1,
+  CREATE: 1,
   EDIT: 2,
   DEL: 3,
   COMPLETED: 4

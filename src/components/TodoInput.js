@@ -1,43 +1,23 @@
-import React, { useState } from "react";
+import React from "react";
 import KeyCode from "../constants/KeyCode";
 
-export default function TodoInput({ value, onAdd }) {
-  value = value || "";
-  onAdd = onAdd || (() => {});
-  const [todoText, setTodoText] = useState(value);
-
-  // useEffect(() => {
-  //   console.log(todoText);
-  // }, [todoText]);
-
-  function handleAddClick() {
-    if (todoText.trim().length === 0) {
-      return;
-    }
-    onAdd(todoText);
-    setTodoText("");
-  }
-
+export default function({ value, onSubmit, onChange, onCancel }) {
   function handleKeyDown(e) {
-    // console.log(e);
-    if (e.keyCode === KeyCode.ENTER) {
-      handleAddClick();
+    if (onChange && e.keyCode === KeyCode.ENTER) {
+      onSubmit();
     }
-  }
-
-  function handleChange(event) {
-    setTodoText(event.target.value);
   }
 
   return (
     <div>
       <input
         type="text"
-        onChange={handleChange}
+        onChange={onChange}
         onKeyDown={handleKeyDown}
-        value={todoText}
+        value={value}
       />
-      <button onClick={handleAddClick}>Add</button>
+      <button onClick={onSubmit}>Save</button>
+      <button onClick={onCancel}>Cancel</button>
     </div>
   );
 }
